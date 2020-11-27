@@ -3,7 +3,7 @@ import { fromEvent, interval } from "rxjs";
 import { first, take, takeUntil } from "rxjs/operators";
 
 const source = interval(1000);
-//no value will pass, emit default
+
 const clicks = fromEvent(document, "click");
 
 const example1 = source.pipe(first());
