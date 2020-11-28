@@ -1,15 +1,34 @@
 // RxJS v6+
-import { fromEvent, interval } from "rxjs";
-import { first, take, takeUntil } from "rxjs/operators";
+import { fromEvent, interval, timer } from "rxjs";
+import {
+  audit,
+  auditTime,
+  debounce,
+  first,
+  take,
+  takeUntil
+} from "rxjs/operators";
 
 const source = interval(1000);
 
 const clicks = fromEvent(document, "click");
 
-const example1 = source.pipe(first());
-const example2 = source.pipe(take(1));
-const example3 = source.pipe(takeUntil(clicks));
+source.pipe(first()).subscribe(val => console.log("first", val));
 
-example1.subscribe(val => console.log("first", val));
-example2.subscribe(val => console.log("take", val));
-example3.subscribe(val => console.log("takeUntilClick", val));
+source.pipe(take(1)).subscribe(val => console.log("take", val));
+
+source
+  .pipe(takeUntil(clicks))
+  .subscribe(val => console.log("takeUntilClick", val));
+
+/*clicks
+  .pipe(audit(ev => interval(2000)))
+  .subscribe(val => console.log("audit", val));*/
+
+/*source
+  .pipe(auditTime(3000))
+  .subscribe(val => console.log("auditTime Clicked", val));*/
+
+clicks
+  .pipe(debounce(() => timer(700)))
+  .subscribe(val => console.log("Clicked 1 sec ago", val));
